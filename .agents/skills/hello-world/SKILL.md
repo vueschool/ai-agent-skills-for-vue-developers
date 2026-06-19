@@ -7,15 +7,15 @@ description: Greet a user. Use when the user asks for a hello world skill exampl
 
 When this skill is invoked:
 
-1. Say "Hello" to the user.
-2. Ask the user their name.
+1. Run `npx tsx scripts/time-of-day.ts`
+2. Greet the user using the script's output.
 
 ## Response format
 
-Use this exact format:
+Use this template:
 
 ```markdown
-Hello! 👋
+[Greeting from script]! 👋
 
-What is your name?
+It's [period] where you are ([localTime]).
 ```
