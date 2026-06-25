@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "manage-mcp": {
+      "source": "nuxt-modules/mcp-toolkit",
+      "sourceType": "github",
+      "skillPath": "apps/docs/skills/manage-mcp/SKILL.md",
+      "computedHash": "8425398b750eeb8a61c976d5a95f47425fbdf521c0d09a619fc626bbdd627b06"
+    },
     "nuxt-ui": {
       "source": "nuxt/ui",
       "sourceType": "github",
