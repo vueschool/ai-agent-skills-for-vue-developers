@@ -7,16 +7,35 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "auth:generate": "better-auth-cli generate --config server/utils/auth.ts --output server/database/auth-schema.ts -y",
+    "db:push": "drizzle-kit push"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild",
+      "@parcel/watcher",
+      "vue-demi"
+    ]
   },
   "dependencies": {
+    "@better-auth/api-key": "^1.6.20",
     "@iconify-json/lucide": "^1.2.114",
     "@nuxt/ui": "^4.9.0",
     "@nuxtjs/mcp-toolkit": "^0.17.2",
+    "better-auth": "^1.6.20",
+    "better-sqlite3": "^12.11.1",
+    "drizzle-orm": "^0.45.2",
+    "nanoid": "^5.1.16",
     "nuxt": "^4.4.8",
     "tailwindcss": "^4.3.1",
     "vue": "^3.5.35",
     "vue-router": "^5.1.0",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "drizzle-kit": "^0.31.10"
   }
 }
