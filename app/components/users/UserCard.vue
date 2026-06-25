@@ -1,56 +1,44 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { User } from "~/types/user";
 
-defineProps<{
+const props = defineProps<{
   user: User;
 }>();
+
+const initials = computed(() =>
+  props.user.name
+    .split(" ")
+    .map((part) => part[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase(),
+);
 </script>
 
 <template>
-  <li class="user-card">
-    <span class="user-card-name">{{ user.name }}</span>
-    <a class="user-card-email" :href="`mailto:${user.email}`">
-      {{ user.email }}
-    </a>
-    <span class="user-card-city">{{ user.city }}</span>
-  </li>
+  <UPageCard spotlight class="h-full">
+    <div class="flex items-center gap-3">
+      <UAvatar :text="initials" :alt="user.name" size="lg" />
+      <div class="min-w-0">
+        <p class="truncate font-semibold text-highlighted">{{ user.name }}</p>
+        <ULink
+          :to="`mailto:${user.email}`"
+          class="block truncate text-sm text-muted hover:text-primary"
+        >
+          {{ user.email }}
+        </ULink>
+      </div>
+    </div>
+
+    <template #footer>
+      <UBadge
+        color="neutral"
+        variant="subtle"
+        icon="i-lucide-map-pin"
+        :label="user.city"
+      />
+    </template>
+  </UPageCard>
 </template>
-
-<style scoped>
-.user-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  background: #fff;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.user-card:hover {
-  border-color: #c7d2fe;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
-}
-
-.user-card-name {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: #0f172a;
-}
-
-.user-card-email {
-  font-size: 0.875rem;
-  color: #6366f1;
-  text-decoration: none;
-}
-
-.user-card-email:hover {
-  text-decoration: underline;
-}
-
-.user-card-city {
-  font-size: 0.8125rem;
-  color: #64748b;
-}
-</style>

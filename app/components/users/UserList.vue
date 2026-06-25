@@ -10,35 +10,37 @@ defineProps<{
 </script>
 
 <template>
-  <p v-if="hasError" class="user-list-status user-list-status--error">
-    Something went wrong while loading users.
-  </p>
-  <p v-else-if="isLoading" class="user-list-status">Loading users...</p>
-  <p v-else-if="users.length === 0" class="user-list-status">
-    No users match your search.
-  </p>
-  <ul v-else class="user-list">
+  <UAlert
+    v-if="hasError"
+    color="error"
+    variant="subtle"
+    icon="i-lucide-circle-alert"
+    title="Something went wrong"
+    description="We couldn't load the users. Please try again."
+  />
+
+  <UPageGrid v-else-if="isLoading">
+    <UPageCard v-for="n in 6" :key="n">
+      <div class="flex items-center gap-3">
+        <USkeleton class="size-10 rounded-full" />
+        <div class="flex-1 space-y-2">
+          <USkeleton class="h-4 w-2/3" />
+          <USkeleton class="h-3 w-full" />
+        </div>
+      </div>
+    </UPageCard>
+  </UPageGrid>
+
+  <div
+    v-else-if="users.length === 0"
+    class="flex flex-col items-center justify-center gap-2 py-16 text-center"
+  >
+    <UIcon name="i-lucide-users" class="size-10 text-dimmed" />
+    <p class="font-medium text-default">No users found</p>
+    <p class="text-sm text-muted">Try adjusting your search.</p>
+  </div>
+
+  <UPageGrid v-else>
     <UserCard v-for="user in users" :key="user.id" :user="user" />
-  </ul>
+  </UPageGrid>
 </template>
-
-<style scoped>
-.user-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.875rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.user-list-status {
-  padding: 2rem 0;
-  text-align: center;
-  color: #64748b;
-}
-
-.user-list-status--error {
-  color: #dc2626;
-}
-</style>
