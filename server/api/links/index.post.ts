@@ -48,10 +48,11 @@ export default defineEventHandler(async (event) => {
     slug = await createUniqueSlug();
   }
 
-  const [link] = await db
-    .insert(links)
-    .values({ slug, target: normalizedTarget, userId: user.id })
-    .returning();
+  const link = await insertLink({
+    slug,
+    target: normalizedTarget,
+    userId: user.id,
+  });
 
   setResponseStatus(event, 201);
   return toLinkDto(event, link);

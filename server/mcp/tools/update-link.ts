@@ -14,7 +14,7 @@ export default defineMcpTool({
   inputExamples: [{ slug: "nuxt", target: "https://nuxt.com/docs" }],
   handler: async ({ slug, target }) => {
     const event = useEvent();
-    const userId = event.context.user.id as string;
+    const userId = requireMcpUser(event);
     const normalizedTarget = normalizeTargetUrl(target);
 
     const [updated] = await useDb()

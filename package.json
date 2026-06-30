@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "auth:generate": "better-auth-cli generate --config server/utils/auth.ts --output server/database/auth-schema.ts -y",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "test": "vitest run"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "drizzle-kit": "^0.31.10"
+    "drizzle-kit": "^0.31.10",
+    "vitest": "^4.1.9"
   }
 }

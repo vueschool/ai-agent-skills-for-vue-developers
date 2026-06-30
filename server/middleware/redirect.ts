@@ -14,7 +14,7 @@ export default defineEventHandler((event) => {
   const segments = getRequestURL(event).pathname.split("/").filter(Boolean);
   if (segments.length !== 1) return;
 
-  const slug = segments[0];
+  const slug = segments[0]!;
   if (isReservedSlug(slug) || !isValidSlug(slug)) return;
 
   const db = useDb();
@@ -26,6 +26,9 @@ export default defineEventHandler((event) => {
 
   if (!link) return; // fall through → branded 404 page
 
+  // Intentional open redirect: this is a URL shortener, so sending visitors to
+  // arbitrary user-supplied targets is the core feature. Targets are restricted
+  // to http/https at creation time (see normalizeTargetUrl).
   db.update(links)
     .set({ clickCount: sql`${links.clickCount} + 1` })
     .where(eq(links.id, link.id))

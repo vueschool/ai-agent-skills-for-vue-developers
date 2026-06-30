@@ -24,7 +24,7 @@ export default defineMcpTool({
   ],
   handler: async ({ target, alias }) => {
     const event = useEvent();
-    const userId = event.context.user.id as string;
+    const userId = requireMcpUser(event);
     const db = useDb();
     const normalizedTarget = normalizeTargetUrl(target);
 
@@ -59,10 +59,7 @@ export default defineMcpTool({
       slug = await createUniqueSlug();
     }
 
-    const [link] = await db
-      .insert(links)
-      .values({ slug, target: normalizedTarget, userId })
-      .returning();
+    const link = await insertLink({ slug, target: normalizedTarget, userId });
 
     return toLinkDto(event, link);
   },

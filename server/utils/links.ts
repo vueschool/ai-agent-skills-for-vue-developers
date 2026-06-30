@@ -2,6 +2,39 @@ import type { H3Event } from "h3";
 import { eq } from "drizzle-orm";
 import { links, type Link } from "../database/schema";
 
+/**
+ * Insert a link, translating a slug uniqueness violation into a clean 409.
+ * This guards the check-then-insert race where two concurrent requests both
+ * pass the "is this alias free?" check before either has committed.
+ */
+export async function insertLink(values: {
+  slug: string;
+  target: string;
+  userId: string;
+}): Promise<Link> {
+  const db = useDb();
+  try {
+    const [link] = await db.insert(links).values(values).returning();
+    return link!;
+  } catch (error) {
+    if (isUniqueConstraintError(error)) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: `The alias '${values.slug}' is already taken.`,
+      });
+    }
+    throw error;
+  }
+}
+
+function isUniqueConstraintError(error: unknown): boolean {
+  const code = (error as { code?: string })?.code;
+  if (code === "SQLITE_CONSTRAINT_UNIQUE" || code === "SQLITE_CONSTRAINT") {
+    return true;
+  }
+  return /UNIQUE constraint failed/i.test(String((error as Error)?.message));
+}
+
 export function getBaseUrl(event: H3Event): string {
   const configured = useRuntimeConfig(event).public.shortBaseUrl as string;
   if (configured) return configured.replace(/\/+$/, "");

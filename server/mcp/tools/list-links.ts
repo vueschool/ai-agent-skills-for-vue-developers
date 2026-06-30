@@ -7,7 +7,7 @@ export default defineMcpTool({
   enabled: (event) => Boolean(event.context.user),
   handler: async () => {
     const event = useEvent();
-    const userId = event.context.user.id as string;
+    const userId = requireMcpUser(event);
 
     const rows = await useDb()
       .select()

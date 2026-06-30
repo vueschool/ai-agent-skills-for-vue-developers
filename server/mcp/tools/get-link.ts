@@ -13,7 +13,7 @@ export default defineMcpTool({
   inputExamples: [{ slug: "nuxt" }],
   handler: async ({ slug }) => {
     const event = useEvent();
-    const userId = event.context.user.id as string;
+    const userId = requireMcpUser(event);
 
     const link = useDb()
       .select()
